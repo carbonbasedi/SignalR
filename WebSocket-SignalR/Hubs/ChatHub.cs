@@ -4,9 +4,19 @@ namespace WebSocket_SignalR.Hubs
 {
 	public class ChatHub : Hub
 	{
-		public async Task SendMessage(string user, string message)
+		public async Task AddToGroupAsync(string group)
 		{
-			await Clients.All.SendAsync("ReceiveMessage", user, message);
+			await Groups.AddToGroupAsync(Context.ConnectionId, group);
+		}
+
+		public async Task RemoveFromGroupAsync(string group)
+		{
+			await Groups.RemoveFromGroupAsync(Context.ConnectionId, group);
+		}
+
+		public async Task SendMessage(string username,string group , string message)
+		{
+			await Clients.Group(group).SendAsync("ReceiveMessage", username, message);
 		}
 	}
 }
